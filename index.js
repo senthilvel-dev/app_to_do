@@ -2,12 +2,9 @@ var express = require("express");
 require("dotenv").config();
 var app = express();
 const { Client } = require("pg");
-const connectionstring = process.env.db_conn;
 var Excel = require("exceljs");
 var wb = new Excel.Workbook();
-const client = new Client({
-  connectionstring,
-});
+const client = new Client(process.env.db_conn);
 client.connect(function (err) {
   if (err) {
     console.log(err);
@@ -34,8 +31,4 @@ app.get("/insert", function (req, res) {
   });
   res.send("inserted");
 });
-var server = app.listen(8080, function () {
-  var host = server.address().address;
-  var port = server.address().port;
-  console.log("Done");
-});
+app.listen(8080, console.log("Server is running at port 8080"));
