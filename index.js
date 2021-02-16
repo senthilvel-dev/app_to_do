@@ -1,9 +1,9 @@
 var express = require ('express');
 var app = express();
 var fs = require('fs');
-const jwt = require('njwt');
+var jwt = require ("jsonwebtoken");
 const claims ={Name:'Vel'};
-const token = jwt.create(claims,'Secret-key');
+var token = jwt.sign({name:"Vel"},'pass',{expiresIn:60*60});
 const {Client} = require('pg');
 var Excel = require('exceljs');
 var wb = new Excel.Workbook();
@@ -36,7 +36,11 @@ app.get('/insert',function(req,res){
             console.log(err);
         }
     })
-    res.send('inserted',token);
+    res.send('inserted');
+})
+app.get('/token',function(){
+var decoded = jwt.decode(token)
+res.send(decoded.name);
 })
 var server= app.listen(8080,function(){
     var host= server.address().address;
